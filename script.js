@@ -1,78 +1,39 @@
 // Assignment code here
-function randomInt(min, max){
-  if(!max){
-    max = min;
-    min = 0;
+function generatePassword() {
+  const length = parseInt(prompt("Length of password (between 8 and 128)?"));
+  if (length < 8 || length > 128) {
+    alert("Please choose a number between 8 and 128.");
+    return "";
   }
-  var rand = Math.random();
-  return Math.floor(min*(1 - rand) + rand*max)
+
+  const hasNumbers = confirm("Would you like to use numbers?");
+  const hasSymbols = confirm("Would you like to use symbols?");
+  const hasLowercase = confirm("Would you like to use lowercase letters?");
+  const hasUppercase = confirm("Would you like to use uppercase letters?");
+
+  const characters = [];
+  if (hasNumbers) characters.push("0123456789");
+  if (hasSymbols) characters.push("!?'^%$#@&*()");
+  if (hasLowercase) characters.push("abcdefghijklmnopqrstuvwxyz");
+  if (hasUppercase) characters.push("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+
+  if (characters.length === 0) {
+    alert("Please choose at least one character type.");
+    return "";
+  }
+
+  let password = "";
+  for (let i = 0; i < length; i++) {
+    const chars = characters[Math.floor(Math.random() * characters.length)];
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+
+  return password;
 }
 
-function getRandom(list) {
-  return list[randomInt(list.length)]
-}
-
-
-function generatePassword(){
- var anwser = window.prompt("length of password?");
-var anwserLength = parseInt(anwser);
-
-if (anwserLength < 8 || anwserLength > 128){
-  window.alert("Choose a number between 8-128 please!");
-  return;
-}
-
-var numbersQ = window.confirm("Would you like to use numbers?");
-var symbolsQ = window.confirm("Would you like to use symbols?");
-var lcaseQ = window.confirm("Would you like to use lowercase letters?");
-var ucaseQ = window.confirm("Would you like to use uppercase letters?");
-
-var numList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-var symbolList = ["!", "?", "'", "^", "%", "$", "#", "@", "&", "*", "(", ")"];
-var lcaseList = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-var ucaseList = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-
-var anwsers = [];
-
-if (anwsers.length === 0){
-  anwsers.push(numList);
-}
-
-if (numbersQ === true) {
-anwsers.push(numList);
-}
-if (symbolsQ === true) {
-  anwsers.push(symbolList);
-}
-if (lcaseQ === true) {
-  anwsers.push(lcaseList);
-}
-if (ucaseQ === true) {
-  anwsers.push(ucaseList);
-}
-
-var generatePassword = ""
-
-for (var i = 0; i < anwserLength; i++){
-  var item = getRandom(anwsers);
-  var item2 = getRandom(item);
-  generatePassword += item2;
-}
- 
-return generatePassword;
-
-}
-
-// Get references to the #generate element
-var generateBtn = document.querySelector("#generate");
-
-// Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
-
+const generateBtn = document.querySelector("#generate");
+generateBtn.addEventListener("click", () => {
+  const password = generatePassword();
+  const passwordText = document.querySelector("#password");
   passwordText.value = password;
-
-}
-// Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
+});
